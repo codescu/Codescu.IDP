@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: blazedesk
+  name: blazedesk-idp
+  labels:
+    app: blazedesk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blazedesk
+      tier: idp
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: blazedesk
+        tier: idp
+    spec:
+      containers:
+      - env:
+        - name: ASPNETCORE_URLS
+          value: http://+:80;https://+:443
+        - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+          value: piraterie
+        - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+          value: /app/tls/certificate.pfx
+        image: mihaimyh/codescu.idp:latest
+        imagePullPolicy: Always
+        name: blazedesk
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        volumeMounts:
+        - name: blazedesk-storage
+          mountPath: "/app/tls"
+      volumes:
+      - name: blazedesk-storage
+        persistentVolumeClaim:
+          claimName: blazedesk-persistent-storage
