@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <AssemblyVersion>1.0.8.19336</AssemblyVersion>
-    <FileVersion>1.0.8.19336</FileVersion>
+    <AssemblyVersion>1.0.9.19336</AssemblyVersion>
+    <FileVersion>1.0.9.19336</FileVersion>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>

@@ -84,8 +84,8 @@ namespace Codescu.IDP
             }
 
             app.UseStaticFiles();
-
             app.UseRouting();
+            app.UseForwardedHeaders();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
