@@ -19,6 +19,10 @@ spec:
         app: blazedesk
         tier: idp
     spec:
+      hostAliases:
+      - ip: "10.1.1.253"
+        hostnames:
+        - "dev.codescu.com"
       containers:
       - env:
         - name: ASPNETCORE_URLS
