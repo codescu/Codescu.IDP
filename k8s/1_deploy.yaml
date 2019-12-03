@@ -30,7 +30,7 @@ spec:
         - name: ASPNETCORE_Kestrel__Certificates__Default__Password
           value: piraterie
         - name: ASPNETCORE_Kestrel__Certificates__Default__Path
-          value: /app/tls/certificate.pfx
+          value: /app/tls/blazedesk-idp.pfx
         image: mihaimyh/codescu.idp:latest
         imagePullPolicy: Always
         name: blazedesk
