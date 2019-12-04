@@ -49,9 +49,9 @@ namespace Codescu.IDP
                     RequirePkce = false,
                     ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
 
-                    RedirectUris = { "https://dev.codescu.com/signin-oidc" },
-                    FrontChannelLogoutUri = "https://dev.codescu.com/signout-oidc",
-                    PostLogoutRedirectUris = { "https://dev.codescu.com/signout-callback-oidc" },
+                    RedirectUris = { "http://dev.codescu.com/signin-oidc" },
+                    FrontChannelLogoutUri = "http://dev.codescu.com/signout-oidc",
+                    PostLogoutRedirectUris = { "http://dev.codescu.com/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "api1" }
