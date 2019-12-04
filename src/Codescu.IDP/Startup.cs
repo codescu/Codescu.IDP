@@ -87,28 +87,19 @@ namespace Codescu.IDP
 
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseForwardedHeaders();
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseIdentityServer();
-            ConfigureHttpsForwardingBehindProxy(app);
 
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
             });
-        }
-
-        private void ConfigureHttpsForwardingBehindProxy(IApplicationBuilder app)
-        {
-            var fordwardedHeaderOptions = new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            };
-            fordwardedHeaderOptions.KnownNetworks.Clear();
-            fordwardedHeaderOptions.KnownProxies.Clear();
-
-            app.UseForwardedHeaders(fordwardedHeaderOptions);
         }
     }
 }
