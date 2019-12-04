@@ -20,17 +20,20 @@ spec:
         tier: idp
     spec:
       hostAliases:
-      - ip: "10.1.1.253"
+      - ip: "10.152.183.39"
         hostnames:
         - "dev.codescu.com"
+      - ip: "10.152.183.146"
+        hostnames:
+        - "idp.codescu.com"
       containers:
       - env:
         - name: ASPNETCORE_URLS
-          value: http://+:80;https://+:443
-        - name: ASPNETCORE_Kestrel__Certificates__Default__Password
-          value: piraterie
-        - name: ASPNETCORE_Kestrel__Certificates__Default__Path
-          value: /app/tls/blazedesk-idp.pfx
+          value: http://+:80
+#        - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+#          value: piraterie
+#        - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+#          value: /app/tls/wildcard.codescu.com.pfx
         image: mihaimyh/codescu.idp:latest
         imagePullPolicy: Always
         name: blazedesk
