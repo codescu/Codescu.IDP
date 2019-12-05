@@ -20,16 +20,27 @@ spec:
         tier: idp
     spec:
       hostAliases:
-      - ip: "10.152.183.39"
+      - ip: "10.1.1.253"
         hostnames:
         - "dev.codescu.com"
-      - ip: "10.152.183.146"
-        hostnames:
         - "idp.codescu.com"
+#      - ip: "10.152.183.146"
+#        hostnames:
+#        - "idp.codescu.com"
       containers:
       - env:
         - name: ASPNETCORE_URLS
           value: http://+:80
+        - name: Clients__1__RedirectUris__0
+          value: http://dev.codescu.com/signin-oidc
+        - name: Clients__1__FrontChannelLogoutUris__0
+          value: http://dev.codescu.com/signout-oidc
+        - name: Clients__1__PostLogoutRedirectUris__0
+          value: http://dev.codescu.com/signout-callback-oidc
+        - name: Clients__1__AllowedGrantTypes__0
+          value: code
+        - name:  Clients__1__AllowedGrantTypes__1
+          value: id_token
 #        - name: ASPNETCORE_Kestrel__Certificates__Default__Password
 #          value: piraterie
 #        - name: ASPNETCORE_Kestrel__Certificates__Default__Path
