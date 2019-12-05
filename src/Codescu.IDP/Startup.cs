@@ -26,6 +26,12 @@ namespace Codescu.IDP
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+
             services.AddControllersWithViews();
 
             // configures IIS out-of-proc settings (see https://github.com/aspnet/AspNetCore/issues/14882)
@@ -80,6 +86,8 @@ namespace Codescu.IDP
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseForwardedHeaders();
+
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
