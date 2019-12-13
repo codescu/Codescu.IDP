@@ -20,31 +20,37 @@ spec:
         tier: idp
     spec:
       hostAliases:
-      - ip: "10.1.1.253"
+      - ip: "10.152.183.39"
         hostnames:
         - "dev.codescu.com"
+      - ip: "10.152.183.146"
+        hostnames:
         - "idp.codescu.com"
-#      - ip: "10.152.183.146"
-#        hostnames:
-#        - "idp.codescu.com"
       containers:
       - env:
         - name: ASPNETCORE_URLS
-          value: http://+:80
+          value: https://+:443
+        - name: Clients__1__ClientName
+          value: Blazor UI
         - name: Clients__1__RedirectUris__0
-          value: http://dev.codescu.com/signin-oidc
+          value: https://dev.codescu.com/signin-oidc
         - name: Clients__1__FrontChannelLogoutUris__0
-          value: http://dev.codescu.com/signout-oidc
+          value: https://dev.codescu.com/signout-oidc
         - name: Clients__1__PostLogoutRedirectUris__0
-          value: http://dev.codescu.com/signout-callback-oidc
+          value: https://dev.codescu.com/signout-callback-oidc
+        - name: Clients__1__RedirectUris__1
+          value: https://dev.codescu.com/signin-oidc
+        - name: Clients__1__FrontChannelLogoutUris__1
+          value: https://dev.codescu.com/signout-oidc
+        - name: Clients__1__PostLogoutRedirectUris__1
+#          value: https://dev.codescu.com/signout-callback-oidc
+          value: https://dev.codescu.com
         - name: Clients__1__AllowedGrantTypes__0
-          value: code
-        - name:  Clients__1__AllowedGrantTypes__1
-          value: id_token
-#        - name: ASPNETCORE_Kestrel__Certificates__Default__Password
-#          value: piraterie
-#        - name: ASPNETCORE_Kestrel__Certificates__Default__Path
-#          value: /app/tls/wildcard.codescu.com.pfx
+          value: hybrid
+        - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+          value: piraterie
+        - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+          value: /app/tls/wildcard.codescu.com.pfx
         image: mihaimyh/codescu.idp:latest
         imagePullPolicy: Always
         name: blazedesk
@@ -54,7 +60,12 @@ spec:
         volumeMounts:
         - name: blazedesk-storage
           mountPath: "/app/tls"
+        - name: tz-config
+          mountPath: /etc/localtime
       volumes:
       - name: blazedesk-storage
         persistentVolumeClaim:
           claimName: blazedesk-persistent-storage
+      - name: tz-config
+        hostPath:
+          path: /usr/share/zoneinfo/Europe/Bucharest
