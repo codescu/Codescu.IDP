@@ -39,12 +39,12 @@ spec:
         - name: Clients__1__PostLogoutRedirectUris__0
           value: https://dev.codescu.com/signout-callback-oidc
         - name: Clients__1__RedirectUris__1
-          value: https://dev.codescu.com/signin-oidc
+          value: https://localhost:5004/signin-oidc
         - name: Clients__1__FrontChannelLogoutUris__1
-          value: https://dev.codescu.com/signout-oidc
+          value: https://localhost:5004/signout-oidc
         - name: Clients__1__PostLogoutRedirectUris__1
 #          value: https://dev.codescu.com/signout-callback-oidc
-          value: https://dev.codescu.com
+          value: https://localhost:5004
         - name: Clients__1__AllowedGrantTypes__0
           value: hybrid
         - name: ASPNETCORE_Kestrel__Certificates__Default__Password
