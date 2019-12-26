@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using Codescu.IDP.Areas.Identity.Data;
 using IdentityServer4;
 using IdentityServer4.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
@@ -32,7 +33,7 @@ namespace Codescu.IDP
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
 
-            services.AddControllersWithViews();
+            services.AddMvc();
 
             // configures IIS out-of-proc settings (see https://github.com/aspnet/AspNetCore/issues/14882)
             services.Configure<IISOptions>(iis =>
@@ -50,13 +51,13 @@ namespace Codescu.IDP
 
             var builder = services.AddIdentityServer(options =>
             {
-                options.PublicOrigin = "https://idp.codescu.com";
+                //options.PublicOrigin = "https://idp.codescu.com";
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
             })
-                .AddTestUsers(TestUsers.Users);
+                .AddAspNetIdentity<ApplicationUser>();
 
             // in-memory, code config
             builder.AddInMemoryIdentityResources(Config.Ids);
@@ -106,7 +107,9 @@ namespace Codescu.IDP
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
             });
         }
     }

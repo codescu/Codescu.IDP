@@ -2,18 +2,27 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using Codescu.IDP.Areas.Identity.Data;
+using Codescu.IDP.Data;
+using IdentityModel;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Codescu.IDP
 {
     public class Program
     {
-        public static int Main(string[] args)
+        public static async Task<int> Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -33,8 +42,58 @@ namespace Codescu.IDP
 
             try
             {
+                var host = CreateHostBuilder(args).Build();
+
+
+                using (var scope = host.Services.CreateScope())
+                {
+                    var services = scope.ServiceProvider;
+
+                    var context = services.GetRequiredService<UserDbContext>();
+
+                    Log.Information("Applying migrations...");
+                    context.Database.Migrate();
+
+                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+                    Log.Information("Seeding default user...");
+                    var bob = await userManager.FindByNameAsync("Bob");
+
+                    if (bob is null)
+                    {
+                        bob = new ApplicationUser
+                        {
+                            UserName = "Bob",
+                            EmailConfirmed = true
+                        };
+
+                        var result = await userManager.CreateAsync(bob, "Password1!");
+
+                        if (!result.Succeeded)
+                            throw new Exception(result.Errors.First().Description);
+
+                        result = await userManager.AddClaimsAsync(bob, new Claim[]
+                        {
+                            new Claim(JwtClaimTypes.Name, "Bob Smith"),
+                            new Claim(JwtClaimTypes.GivenName, "Bob"),
+                            new Claim(JwtClaimTypes.FamilyName, "Smith"),
+                            new Claim(JwtClaimTypes.Email, "BobSmith@email.com"),
+                            new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
+                            new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
+                            new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
+                            new Claim("location", "somewhere")
+                        });
+
+                        if (!result.Succeeded)
+                            throw new Exception(result.Errors.First().Description);
+                    }
+
+                }
+
                 Log.Information("Starting host...");
-                CreateHostBuilder(args).Build().Run();
+
+                host.Run();
+
                 return 0;
             }
             catch (Exception ex)
