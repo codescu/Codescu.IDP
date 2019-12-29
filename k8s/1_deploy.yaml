@@ -30,22 +30,22 @@ spec:
       - env:
         - name: ASPNETCORE_URLS
           value: https://+:443
-        - name: Clients__1__ClientName
+        - name: Clients__0__ClientName
           value: Blazor UI
-        - name: Clients__1__RedirectUris__0
+        - name: Clients__0__RedirectUris__0
           value: https://dev.codescu.com/signin-oidc
-        - name: Clients__1__FrontChannelLogoutUris__0
+        - name: Clients__0__FrontChannelLogoutUris__0
           value: https://dev.codescu.com/signout-oidc
-        - name: Clients__1__PostLogoutRedirectUris__0
+        - name: Clients__0__PostLogoutRedirectUris__0
           value: https://dev.codescu.com/signout-callback-oidc
-        - name: Clients__1__RedirectUris__1
+        - name: Clients__0__RedirectUris__1
           value: https://localhost:5004/signin-oidc
-        - name: Clients__1__FrontChannelLogoutUris__1
+        - name: Clients__0__FrontChannelLogoutUris__1
           value: https://localhost:5004/signout-oidc
-        - name: Clients__1__PostLogoutRedirectUris__1
+        - name: Clients__0__PostLogoutRedirectUris__1
 #          value: https://dev.codescu.com/signout-callback-oidc
           value: https://localhost:5004
-        - name: Clients__1__AllowedGrantTypes__0
+        - name: Clients__0__AllowedGrantTypes__0
           value: hybrid
         - name: ASPNETCORE_Kestrel__Certificates__Default__Password
           value: piraterie
