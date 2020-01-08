@@ -6,11 +6,13 @@ using Codescu.IDP.Areas.Identity.Data;
 using IdentityServer4;
 using IdentityServer4.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace Codescu.IDP
 {
@@ -73,16 +75,21 @@ namespace Codescu.IDP
             builder.AddDeveloperSigningCredential();
 
             services.AddAuthentication();
-                //.AddGoogle(options =>
-                //{
-                //    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+            //.AddGoogle(options =>
+            //{
+            //    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
 
-                //    // register your IdentityServer with Google at https://console.developers.google.com
-                //    // enable the Google+ API
-                //    // set the redirect URI to http://localhost:5000/signin-google
-                //    options.ClientId = "copy client ID from Google here";
-                //    options.ClientSecret = "copy client secret from Google here";
-                //});
+            //    // register your IdentityServer with Google at https://console.developers.google.com
+            //    // enable the Google+ API
+            //    // set the redirect URI to http://localhost:5000/signin-google
+            //    options.ClientId = "copy client ID from Google here";
+            //    options.ClientSecret = "copy client secret from Google here";
+            //});
+
+            var cryptoDir = Configuration.GetSection("KeyStorage").Value;
+
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(cryptoDir));
         }
 
         public void Configure(IApplicationBuilder app)
