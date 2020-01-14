@@ -20,10 +20,10 @@ spec:
         tier: idp
     spec:
       hostAliases:
-      - ip: "10.152.183.39"
+      - ip: "10.152.183.215"
         hostnames:
         - "dev.codescu.com"
-      - ip: "10.152.183.146"
+      - ip: "10.152.183.140"
         hostnames:
         - "idp.codescu.com"
       containers:
@@ -32,6 +32,8 @@ spec:
           value: https://+:443
         - name: Clients__0__ClientName
           value: Blazor UI
+        - name: Clients__0__AllowAccessTokensViaBrowser
+          value: "true"
         - name: Clients__0__RedirectUris__0
           value: https://dev.codescu.com/signin-oidc
         - name: Clients__0__FrontChannelLogoutUris__0
