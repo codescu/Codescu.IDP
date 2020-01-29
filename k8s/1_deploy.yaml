@@ -20,10 +20,10 @@ spec:
         tier: idp
     spec:
       hostAliases:
-      - ip: "10.152.183.39"
+      - ip: "10.152.183.215"
         hostnames:
         - "dev.codescu.com"
-      - ip: "10.152.183.146"
+      - ip: "10.152.183.140"
         hostnames:
         - "idp.codescu.com"
       containers:
@@ -32,6 +32,8 @@ spec:
           value: https://+:443
         - name: Clients__0__ClientName
           value: Blazor UI
+        - name: Clients__0__AllowAccessTokensViaBrowser
+          value: "true"
         - name: Clients__0__RedirectUris__0
           value: https://dev.codescu.com/signin-oidc
         - name: Clients__0__FrontChannelLogoutUris__0
@@ -43,10 +45,21 @@ spec:
         - name: Clients__0__FrontChannelLogoutUris__1
           value: https://localhost:5004/signout-oidc
         - name: Clients__0__PostLogoutRedirectUris__1
-#          value: https://dev.codescu.com/signout-callback-oidc
           value: https://localhost:5004
         - name: Clients__0__AllowedGrantTypes__0
+          value: hybrid
+        - name: Clients__0__AllowedGrantTypes__1
           value: client_credentials
+#        - name: Clients__0__AccessTokenLifetime
+#          value: "10"
+        - name: Clients__0__RequireConsent
+          value: "false"
+        - name: Clients__0__RefreshTokenExpiration
+          value: Sliding
+        - name: Clients__0__AbsoluteRefreshTokenLifetime
+          value: "7200"
+        - name: Clients__0__SlidingRefreshTokenLifetime
+          value: "3600"
         - name: ASPNETCORE_Kestrel__Certificates__Default__Password
           value: piraterie
         - name: ASPNETCORE_Kestrel__Certificates__Default__Path
