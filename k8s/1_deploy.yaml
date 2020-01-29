@@ -20,10 +20,10 @@ spec:
         tier: idp
     spec:
       hostAliases:
-      - ip: "10.152.183.215"
+      - ip: "10.190.26.240"
         hostnames:
         - "dev.codescu.com"
-      - ip: "10.152.183.140"
+      - ip: "10.190.26.242"
         hostnames:
         - "idp.codescu.com"
       containers:
