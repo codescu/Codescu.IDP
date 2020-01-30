@@ -22,6 +22,8 @@ node{
     }    
     stage('Apply deployment script'){
         sh 'kubectl delete -f k8s/7_idsrv_admin_deploy.yaml'
+        sh 'kubectl create -f k8s/7_idsrv_admin_deploy.yaml'
+        sh 'kubectl delete -f k8s/5_idsrv_deploy.yaml'
         sh 'kubectl create -f k8s/5_idsrv_deploy.yaml'
     }    
     stage('Clean-up docker images and containers'){

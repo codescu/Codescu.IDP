@@ -48,7 +48,7 @@ spec:
           value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
         - name: ConnectionStrings__PersistedGrantDbConnection
           value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
-        image: mihaimyh/codescu.idp:new
+        image: mihaimyh/codescu.idp:latest
         imagePullPolicy: Always
         name: skoruba-identityserver4-sts-identity
         ports:
