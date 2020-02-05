@@ -35,8 +35,8 @@ pipeline {
                         label "master"
                     }
                     steps {
-                        sh 'kubectl delete -f k8s/7_idsrv_admin_deploy.yaml'
-                        sh 'kubectl create -f k8s/7_idsrv_admin_deploy.yaml'
+                        sh 'kubectl delete -f k8s/5_2_idsrv_deploy.yaml'
+                        sh 'kubectl create -f k8s/5_2_idsrv_deploy.yaml'
                     }
                 }
 
@@ -46,7 +46,7 @@ pipeline {
                     }
                     steps {
                         sh 'docker image rm mihaimyh/codescu.idp'
-                        // sh 'docker rmi $(docker images -f "dangling=true" -q)'
+                        sh 'docker rmi $(docker images -f "dangling=true" -q)'
                     }
                 }
                 
