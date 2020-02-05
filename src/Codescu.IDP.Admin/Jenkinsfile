@@ -46,7 +46,7 @@ pipeline {
                     }
                     steps {
                         sh 'docker image rm mihaimyh/codescuadminui'
-                        sh 'docker rmi $(docker images -f "dangling=true" -q)'
+                        // sh 'docker rmi $(docker images -f "dangling=true" -q)'
                     }
                 }
                 
