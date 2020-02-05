@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: blazedesk
+  labels:
+    io.kompose.service: codescu-idp-admin
+  name: codescu-idp-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: codescu-idp-admin
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: codescu-idp-admin
+    spec:
+      hostAliases:
+      - ip: "10.190.26.240"
+        hostnames:
+        - "dev.codescu.com"
+      - ip: "10.190.26.244"
+        hostnames:
+        - "idp.codescu.com"
+      - ip: "10.190.26.242"
+        hostnames:
+        - "admin.codescu.com"
+      containers:
+      - args:
+        - dotnet
+        - Codescu.IDP.Admin.dll
+        - /seed
+        env:
+        - name: ASPNETCORE_URLS
+          value: https://+:443
+        - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+          value: piraterie
+        - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+          value: /app/tls/wildcard.codescu.com.pfx
+
+        - name: AdminConfiguration__IdentityAdminBaseUrl
+          value: https://admin.codescu.com
+        - name: AdminConfiguration__IdentityAdminRedirectUri
+          value: https://admin.codescu.com/signin-oidc
+        - name: AdminConfiguration__IdentityServerBaseUrl
+          value: https://idp.codescu.com
+        - name: AdminConfiguration__RequireHttpsMetadata
+          value: "true"
+        - name: ConnectionStrings__AdminAuditLogDbConnection
+          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+        - name: ConnectionStrings__AdminLogDbConnection
+          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+        - name: ConnectionStrings__ConfigurationDbConnection
+          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+        - name: ConnectionStrings__IdentityDbConnection
+          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+        - name: ConnectionStrings__PersistedGrantDbConnection
+          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+        - name: IdentityServerData__Clients__0__AllowedCorsOrigins__0
+          value: https://admin.codescu.com
+        - name: IdentityServerData__Clients__0__ClientUri
+          value: https://admin.codescu.com
+        - name: IdentityServerData__Clients__0__FrontChannelLogoutUri
+          value: https://admin.codescu.com/signin-oidc
+        - name: IdentityServerData__Clients__0__PostLogoutRedirectUris__0
+          value: https://admin.codescu.com/signout-callback-oidc
+        - name: IdentityServerData__Clients__0__RedirectUris__0
+          value: https://admin.codescu.com/signin-oidc
+        - name: IdentityServerData__Clients__1__RedirectUris__0
+          value: http://127.0.0.1.xip.io:5000/swagger/oauth2-redirect.html
+        - name: Serilog__WriteTo__1__Args__connectionString
+          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+        image: mihaimyh/codescuadminui:latest
+        imagePullPolicy: Always
+        name: skoruba-identityserver4-admin
+        ports:
+        - containerPort: 443
+          protocol: TCP
+        volumeMounts:
+        - name: blazedesk-storage
+          mountPath: "/app/tls"
+        - name: tz-config
+          mountPath: /etc/localtime
+      volumes:
+      - name: blazedesk-storage
+        persistentVolumeClaim:
+          claimName: blazedesk-persistent-storage
+      - name: tz-config
+        hostPath:
+          path: /usr/share/zoneinfo/Europe/Bucharest
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
