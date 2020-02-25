@@ -23,26 +23,22 @@ spec:
         io.kompose.service: codescu-idp-sts-identity
     spec:
       hostAliases:
-      - ip: "10.190.26.240"
+      - ip: "10.1.1.253"
         hostnames:
         - "dev.codescu.com"
-      - ip: "10.190.26.244"
-        hostnames:
         - "idp.codescu.com"
-      - ip: "10.190.26.242"
-        hostnames:
         - "admin.codescu.com"
       containers:
       - env:
         - name: ASPNETCORE_URLS
-          value: https://+:443
+          value: https://+:443;http://+80
         - name: ASPNETCORE_Kestrel__Certificates__Default__Password
           valueFrom:
             secretKeyRef:
               name: kestrel-cert-pass
               key: ASPNETCORE_Kestrel__Certificates__Default__Password
         - name: ASPNETCORE_Kestrel__Certificates__Default__Path
-          value: /app/tls/wildcard.codescu.com.pfx
+          value: /app/tls/codescu.com.pfx
         - name: AdminConfiguration__IdentityAdminBaseUrl
           value: https://admin.codescu.com
         - name: ConnectionStrings__ConfigurationDbConnection
@@ -67,6 +63,10 @@ spec:
           mountPath: "/app/tls"
         - name: tz-config
           mountPath: /etc/localtime
+        - name: ca-pemstore
+          mountPath: /etc/ssl/certs/ca.pem
+          subPath: ca.pem
+          readOnly: false
       volumes:
       - name: blazedesk-storage
         persistentVolumeClaim:
@@ -74,6 +74,9 @@ spec:
       - name: tz-config
         hostPath:
           path: /usr/share/zoneinfo/Europe/Bucharest
+      - name: ca-pemstore
+        configMap:
+          name: ca-pemstore
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
