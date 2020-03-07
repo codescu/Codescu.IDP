@@ -35,8 +35,16 @@ pipeline {
                         label "master"
                     }
                     steps {
-                        sh 'kubectl delete -f k8s/5_2_idsrv_deploy.yaml'
-                        sh 'kubectl create -f k8s/5_2_idsrv_deploy.yaml'
+                        script {
+                            try {
+                                sh 'kubectl delete -f k8s/5_2_idsrv_deploy.yaml'
+                            }
+                            finally {
+                                sh 'kubectl create -f k8s/5_2_idsrv_deploy.yaml'
+                            }
+                        }
+                        
+                        
                     }
                 }
 
@@ -45,8 +53,17 @@ pipeline {
                         label "master"
                     }
                     steps {
-                        sh 'docker image rm mihaimyh/codescu.idp'
-                        sh 'docker rmi $(docker images -f "dangling=true" -q)'
+                        script {
+                            try {
+                                sh 'docker image rm mihaimyh/codescu.idp'
+                                sh 'docker rmi $(docker images -f "dangling=true" -q)'
+                            }
+                            catch (Exception) {
+                                
+                            }
+                        }
+                        
+                        
                     }
                 }
                 
