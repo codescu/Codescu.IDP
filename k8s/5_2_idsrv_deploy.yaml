@@ -61,11 +61,23 @@ spec:
           value: https://admin.codescu.com
 
         - name: ConnectionStrings__ConfigurationDbConnection
-          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+          valueFrom:
+            secretKeyRef:
+              name: idp-connection-strings
+              key: identityserveradmin
+
         - name: ConnectionStrings__IdentityDbConnection
-          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+          valueFrom:
+            secretKeyRef:
+              name: idp-connection-strings
+              key: identityserveradmin
+
         - name: ConnectionStrings__PersistedGrantDbConnection
-          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+          valueFrom:
+            secretKeyRef:
+              name: idp-connection-strings
+              key: identityserveradmin
+
         - name: SendgridConfiguration__ApiKey
           valueFrom:
             secretKeyRef:

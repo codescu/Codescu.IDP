@@ -21,9 +21,11 @@ spec:
         io.kompose.service: codescu-idp-admin
     spec:
       hostAliases:
-      - ip: "10.190.26.244"
+      - ip: "10.1.1.253"
         hostnames:
+        - "dev.codescu.com"
         - "idp.codescu.com"
+        - "admin.codescu.com"
       containers:
       - args:
         - dotnet
@@ -33,7 +35,11 @@ spec:
         - name: ASPNETCORE_URLS
           value: https://+:443;http://+80
         - name: ASPNETCORE_Kestrel__Certificates__Default__Password
-          value: piraterie
+          valueFrom:
+            secretKeyRef:
+              name: kestrel-cert-pass
+              key: ASPNETCORE_Kestrel__Certificates__Default__Password
+
         - name: ASPNETCORE_Kestrel__Certificates__Default__Path
           value: /app/tls/codescu.com.pfx
 
@@ -46,15 +52,35 @@ spec:
         - name: AdminConfiguration__RequireHttpsMetadata
           value: "true"
         - name: ConnectionStrings__AdminAuditLogDbConnection
-          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+          valueFrom:
+            secretKeyRef:
+              name: idp-connection-strings
+              key: identityserveradmin
+
         - name: ConnectionStrings__AdminLogDbConnection
-          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+          valueFrom:
+            secretKeyRef:
+              name: idp-connection-strings
+              key: identityserveradmin
+
         - name: ConnectionStrings__ConfigurationDbConnection
-          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+          valueFrom:
+            secretKeyRef:
+              name: idp-connection-strings
+              key: identityserveradmin
+
         - name: ConnectionStrings__IdentityDbConnection
-          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+          valueFrom:
+            secretKeyRef:
+              name: idp-connection-strings
+              key: identityserveradmin
+
         - name: ConnectionStrings__PersistedGrantDbConnection
-          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+          valueFrom:
+            secretKeyRef:
+              name: idp-connection-strings
+              key: identityserveradmin
+
         - name: IdentityServerData__Clients__0__AllowedCorsOrigins__0
           value: https://admin.codescu.com
         - name: IdentityServerData__Clients__0__ClientUri
@@ -65,10 +91,12 @@ spec:
           value: https://admin.codescu.com/signout-callback-oidc
         - name: IdentityServerData__Clients__0__RedirectUris__0
           value: https://admin.codescu.com/signin-oidc
-        - name: IdentityServerData__Clients__1__RedirectUris__0
-          value: http://127.0.0.1.xip.io:5000/swagger/oauth2-redirect.html
+
         - name: Serilog__WriteTo__1__Args__connectionString
-          value: Server=10.190.26.243;Database=IdentityServer4Admin1;User Id=sa;Password=Password_123;MultipleActiveResultSets=true
+          valueFrom:
+            secretKeyRef:
+              name: idp-connection-strings
+              key: identityserveradmin
         image: mihaimyh/codescuadminui:latest
         imagePullPolicy: Always
         name: skoruba-identityserver4-admin
